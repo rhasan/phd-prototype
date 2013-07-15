@@ -5,10 +5,10 @@ sparql.setQuery("""
 SELECT ?m count(?m) AS ?num
 WHERE
 {
-  ?m dcterms:subject ?o.
-  dbpedia:The_Matrix dcterms:subject ?o.
-  ?m a dbpedia-owl:Film.
-  FILTER (?m != dbpedia:The_Matrix)
+	dbpedia:The_Matrix dcterms:subject ?o.
+	?m dcterms:subject ?o.
+	?m a dbpedia-owl:Film.
+	FILTER (?m != dbpedia:The_Matrix)
 
 }
 
