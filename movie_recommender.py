@@ -1,6 +1,6 @@
 from datasets import MovieLens
 
-DBP_ML_MAPPING = "data/mapping-movielens-dbpedia.csv"
+DBP_ML_MAPPING = "mapping-movielens-dbpedia.csv"
 
 def main():
 	ml = MovieLens()
