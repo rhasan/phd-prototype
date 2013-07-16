@@ -5,10 +5,10 @@ queryStr = """
 SELECT ?m count(?m) AS ?num
 WHERE
 {
-	<http://dbpedia.org/resource/Inception> dcterms:subject ?o.
+	<http://dbpedia.org/resource/Home_Alone> dcterms:subject ?o.
 	?m dcterms:subject ?o.
 	?m a dbpedia-owl:Film.
-	FILTER (?m != <http://dbpedia.org/resource/Inception>)
+	FILTER (?m != <http://dbpedia.org/resource/Home_Alone>)
 
 }
 
@@ -20,6 +20,6 @@ sparql.setReturnFormat(JSON)
 results = sparql.query().convert()
 
 for result in results["results"]["bindings"]:
-    #print util.url_decode(result["m"]["value"]), result["num"]["value"]
-    print result["m"]["value"], result["num"]["value"]
+    print util.url_decode(result["m"]["value"]), result["num"]["value"]
+    #print result["m"]["value"], result["num"]["value"]
     
