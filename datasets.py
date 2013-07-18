@@ -122,6 +122,14 @@ class MovieLens:
         data = self.user_rating_data[user_id]
         return sorted(data, key=lambda tup: tup[1],reverse=True)
 
+    def get_avg_user_rating(self,user_id):
+        data = self.get_user_rating_data(user_id)
+        rating_sum = 0.0
+        for (dbp_m_id,r,ml_m_id) in data:
+            rating_sum += r
+        return rating_sum/len(data)
+
+
     """
     Returns the DBpedia URI for a MovieLens movie id
     """
