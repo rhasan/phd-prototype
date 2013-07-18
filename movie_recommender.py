@@ -7,15 +7,16 @@ from SPARQLWrapper import SPARQLWrapper, JSON
 from collections import defaultdict
 
 
-DBPEDIA_ENDPOINT = "http://dbpedia-test.inria.fr/sparql"
+#DBPEDIA_ENDPOINT = "http://dbpedia-test.inria.fr/sparql"
+DBPEDIA_ENDPOINT = "http://dbpedia.org/sparql";
 INIT_USER_K = 10
 INIT_ITEM_K = 20
 
 class MovieRecommender:
     def __init__(self):
         
-        self.ml = MovieLens()
-        self.ml.load_data()
+        self.ml = MovieLens.Instance()
+        #self.ml.load_data()
 
     def get_movie_recommendations(self,dbpedia_uri):
 
@@ -64,6 +65,9 @@ class MovieRecommender:
         return reco_list
 
     def recommendation_for_user(self,ml_user_id):
+
+
+        print "user:", ml_user_id, " likes"
         rated_movies = self.ml.get_user_rating_data(ml_user_id)
         avg_rating = self.ml.get_avg_user_rating(ml_user_id)
         
@@ -74,7 +78,8 @@ class MovieRecommender:
             rating_f = float(rating)
             #movies that the user likes
             if rating_f >= avg_rating:
-                print "finding recommedations for", util.url_decode(dbp_id)
+                #print "finding recommedations for", util.url_decode(dbp_id)
+                print(util.url_decode(dbp_id))
                 m_reco_list = self.get_movie_recommendations(dbp_id)
                 #all_reco_list.extend(m_reco_list)
                 for m_entry in m_reco_list:
@@ -102,8 +107,10 @@ def main():
     #print ml.get_avg_movie_rating_by_dbpedia_uri('http://dbpedia.org/resource/Wag_the_Dog')
     #r_list = recsys.get_movie_recommendations('http://dbpedia.org/resource/Wag_the_Dog')
 
-    r_list = recsys.recommendation_for_user('100')
+    user_id = '100'
+    r_list = recsys.recommendation_for_user(user_id)
     #print r_list
+    print "Recommedations for the user:", user_id
     for (movie_uri,confidence,dbp_id) in r_list:
         try:
             #print movie_uri, confidence, "|explanation:",dbp_id

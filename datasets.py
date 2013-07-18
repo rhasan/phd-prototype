@@ -3,19 +3,28 @@ import util
 import numpy as np
 
 from collections import defaultdict
+from patterns import Singleton
 
 DBP_ML_MAPPING = "data/mapping-movielens-dbpedia.csv"
 ML_ITEM_RATING = "data/ml-100k/u.data"
+ML_USER_DEMO = "data/ml-100k/u.user"
 
 MAX_RATING = 5
 
+#work on making a singletone
+
+@Singleton
 class MovieLens:
     def __init__(self):
         self.ml_to_dbp = dict()
         self.dbp_to_ml = dict()
         self.user_rating_data = defaultdict(lambda: list())
         self.item_rating_data = defaultdict(lambda: np.zeros(MAX_RATING+1))
+        self.user_demographic = dict()
+
+        self.load_data()
     
+
     """
     loads DBpedia movie URI and MovieLens movie id mapping
     """ 
@@ -77,7 +86,33 @@ class MovieLens:
 
         finally:
             f.close()
-    
+
+    """
+    loads movie lens user demographic
+    """
+    def load_movielens_user_demographics(self,file_path):
+        try:
+            f = open(file_path,'rb')
+            for line in f:
+                row = line.split('|')
+                #print row
+                user_id = row[0]
+                age = row[1]
+                gender = row[2]
+                occupation = row[3]
+                zip_code = row[4]
+
+                self.user_demographic[user_id]=(user_id,age,gender,occupation,zip_code)
+        finally:
+            f.close()
+    """
+    get a user by user id
+    """
+    def user_by_id(self,user_id):
+        if self.user_demographic.has_key(user_id):
+            return self.user_demographic[user_id]
+        return None
+
     """
     Takes a DBpedia movie URI as parameter
     returns a tuple of average rating and the number of people rated the movie
@@ -152,5 +187,6 @@ class MovieLens:
         #DBpedia mapping must be loaded first
         self.load_dbpedia_mapping(DBP_ML_MAPPING)
         self.load_movielens_rating_data(ML_ITEM_RATING)
+        self.load_movielens_user_demographics(ML_USER_DEMO)
         
 
