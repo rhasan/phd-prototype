@@ -114,6 +114,12 @@ class MovieLens:
         return None
 
     """
+    checks if the given user is a valid user
+    """
+    def is_valid_user(self,user_id):
+        return self.user_demographic.has_key(user_id)
+
+    """
     Takes a DBpedia movie URI as parameter
     returns a tuple of average rating and the number of people rated the movie
     """
