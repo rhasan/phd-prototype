@@ -45,10 +45,15 @@ class MovieRecommender:
             normalizer = max_score
         else:
             normalizer = movie_score
+        reco_list = list()
         for result in results["results"]["bindings"]:
             if result["m"]["value"] == dbpedia_uri:
                 continue
-            print util.url_decode(result["m"]["value"]), float(result["num"]["value"])/normalizer
+            r_movie_uri = result["m"]["value"]
+            r_movie_con = float(result["num"]["value"])/normalizer
+            m_entry = (r_movie_uri,r_movie_con)
+            reco_list.append(m_entry)
+        return reco_list
 
 
 def main():
@@ -58,7 +63,10 @@ def main():
     #print ml.get_DBpedia_mapped_movie_list()
     #print ml.get_avg_movie_rating_by_dbpedia_uri('http://dbpedia.org/resource/Roman_Holiday')
     #print ml.get_avg_movie_rating_by_dbpedia_uri('http://dbpedia.org/resource/Wag_the_Dog')
-    recsys.get_movie_recommendations('http://dbpedia.org/resource/Wag_the_Dog')
+    r_list = recsys.get_movie_recommendations('http://dbpedia.org/resource/Wag_the_Dog')
+
+    for (movie_uri,confidence) in r_list:
+        print util.url_decode(movie_uri), confidence
 
     #print ml.get_user_rating_data('122')
     #print
