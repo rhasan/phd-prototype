@@ -5,10 +5,10 @@ queryStr = """
 SELECT ?m count(?m) AS ?num
 WHERE
 {
-	<http://dbpedia.org/resource/Catch_Me_If_You_Can> dcterms:subject ?o.
-	?m dcterms:subject ?o.
-	?m a dbpedia-owl:Film.
-	FILTER (?m != <http://dbpedia.org/resource/Catch_Me_If_You_Can>)
+    <http://dbpedia.org/resource/Catch_Me_If_You_Can> dcterms:subject ?o.
+    ?m dcterms:subject ?o.
+    ?m a dbpedia-owl:Film.
+    FILTER (?m != <http://dbpedia.org/resource/Catch_Me_If_You_Can>)
 
 }
 
