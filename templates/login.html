@@ -1,6 +1,35 @@
-$def with (form)
+{% extends "base.html" %}
 
-<form name="main" method="post"> 
-$if not form.valid: <p class="error">Try again</p>
-$:form.render()
-<input type="submit" value="Login"/>    </form>
+{% block content %}
+    <h2>Login</h2>
+    <form method="post">
+      <table>
+        <tr>
+          <td class="label">
+            Username
+          </td>
+          <td>
+            <input type="text" name="username" value="">
+          </td>
+        </tr>
+
+        <tr>
+          <td class="label">
+            Password
+          </td>
+          <td>
+            <input type="password" name="password" value="">
+          </td>
+        </tr>
+
+        <tr>
+          <td class="error">
+            {{error}}
+          </td>
+        </tr>
+
+      </table>
+
+      <input type="submit">
+    </form>
+{% endblock %}

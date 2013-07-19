@@ -6,7 +6,7 @@ import hashlib
 import hmac
 import random
 import string
-
+JSON_CONTENT_TYPE =  'application/json; charset=UTF-8'
 
 """
 escapes an HTML string

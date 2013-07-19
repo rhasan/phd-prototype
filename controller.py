@@ -4,13 +4,15 @@ from datasets import MovieLens
 from index import Index
 from login import Login
 from home import Home
+from profile import Profile
 
 
 
 urls = (
     '/', 'Index',
     '/login','Login',
-    '/home','Home'
+    '/home','Home',
+    '/profile','Profile'
 )
 
 ml = MovieLens.Instance()

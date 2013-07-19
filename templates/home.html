@@ -1,6 +1,5 @@
-$def with (name)
+{% extends "base.html" %}
 
-$if name:
-    I just wanted to say <em>hello</em> to $name.
-$else:
-    <em>Hello</em>, world!
+{% block content %}
+	<h2>Welcome, I just wanted to say <em>hello</em> to {{username}}!</h2>
+{% endblock %}

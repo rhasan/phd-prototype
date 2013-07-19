@@ -3,15 +3,8 @@ from request_handler import RequestHandler
 from web import form
 from datasets import MovieLens
 
-render = web.template.render('templates/')
-ml = MovieLens.Instance()
 
-login_form = form.Form(
-            form.Textbox('username',
-                form.notnull,
-                form.Validator('Must be more than 3', lambda x:int(x)>3)),
-            form.Password('password'),
-        )
+ml = MovieLens.Instance()
 
 class Login(RequestHandler):
 
@@ -23,27 +16,19 @@ class Login(RequestHandler):
 
         if self.user:
             web.redirect('/home')
-            return
-
-        f = login_form()
+        else:
        
-        return render.login(f)
+            return self.render('login.html')
 
     def POST(self):
-        f = login_form()
-
-        if not f.validates():
-            return render.login(f)
-
-        username = f['username'].value
-        password = f['password'].value
         
-        #web.debug(type(username))
-        #web.debug(username)
+        inp = web.input()
+        username =  inp.username
+        password = inp.password
+        
         
         if not ml.is_valid_user(username):
-            return render.login(f)
+            return self.render('login.html', error = 'Invalid login')
         else:
-            user = ml.user_by_id(username)
             self.login(username)
             web.redirect('/home')
