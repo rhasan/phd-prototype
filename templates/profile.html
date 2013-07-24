@@ -2,7 +2,8 @@
 
 {% block content %}
 	<h2>Welcome, {{username}}!</h2>
+    <p>You rated the following movies</p>
   {% for (dbp_id,rating,ml_id) in rated_movies %}
-    {{dbp_id | safe}}
+    {{dbp_id | safe}} &nbsp {{rating}}<br/>
   {% endfor %}    
 {% endblock %}
