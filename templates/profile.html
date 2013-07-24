@@ -2,4 +2,7 @@
 
 {% block content %}
 	<h2>Welcome, {{username}}!</h2>
+  {% for (dbp_id,rating,ml_id) in rated_movies %}
+    {{dbp_id | safe}}
+  {% endfor %}    
 {% endblock %}

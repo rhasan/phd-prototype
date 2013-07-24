@@ -7,8 +7,8 @@ from SPARQLWrapper import SPARQLWrapper, JSON
 from collections import defaultdict
 
 
-#DBPEDIA_ENDPOINT = "http://dbpedia-test.inria.fr/sparql"
-DBPEDIA_ENDPOINT = "http://dbpedia.org/sparql";
+DBPEDIA_ENDPOINT = "http://dbpedia-test.inria.fr/sparql"
+#DBPEDIA_ENDPOINT = "http://dbpedia.org/sparql";
 INIT_USER_K = 10
 INIT_ITEM_K = 20
 
