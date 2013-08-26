@@ -163,6 +163,9 @@ class MovieLens:
         data = self.user_rating_data[user_id]
         return sorted(data, key=lambda tup: tup[1],reverse=True)
 
+    """
+    Returns the average rating (float) by a user.
+    """
     def get_avg_user_rating(self,user_id):
         data = self.get_user_rating_data(user_id)
         rating_sum = 0.0

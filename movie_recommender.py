@@ -17,7 +17,12 @@ class MovieRecommender:
         
         self.ml = MovieLens.Instance()
         #self.ml.load_data()
-
+    """
+    Returns a list of similar movies based on the number of common dcterms:subject counts.
+    Each entry in the list of recommendation is a tuple. Each tuple has the (movie URI, confidence score).
+    Confidence score values range from 0.0 to 1.0. The value 0.0 means not similar at all and the value 1.0
+    means completly similar.
+    """
     def get_movie_recommendations(self,dbpedia_uri):
 
         sparql = SPARQLWrapper(DBPEDIA_ENDPOINT)
@@ -64,6 +69,16 @@ class MovieRecommender:
             reco_list.append(m_entry)
         return reco_list
 
+    """
+    Returns a list of recommended movies for a MovieLens user specified by ml_user_id.
+    The recommendation is computed based on the movies the user rated. The recommendations 
+    are the movies that are similar to the movies with rating greater than on equals to the 
+    average rating by the user. Computes similar movies for maximum INIT_USER_K rated movies.
+    The return value is a tuple of lists. The first list in the tuple are the list of movies 
+    rated by the user and has the structure (DBpedia URI, rating (int), and MovieLens movie id (string)).
+    The second list is the list of recommendations and has the structure (recommended movie URI, confidence score, recommended from rated movie URI)
+    """
+
     def recommendation_for_user(self,ml_user_id):
 
 
@@ -78,12 +93,14 @@ class MovieRecommender:
             rating_f = float(rating)
             #movies that the user likes
             if rating_f >= avg_rating:
-                #print "finding recommedations for", util.url_decode(dbp_id)
+                #print "finding recommendations for", util.url_decode(dbp_id)
                 print(util.url_decode(dbp_id))
                 m_reco_list = self.get_movie_recommendations(dbp_id)
                 #all_reco_list.extend(m_reco_list)
                 for m_entry in m_reco_list:
                     (r_dbp_uri,r_confidence) = m_entry
+                    # to make sure that maximum confidence score recommendation is considered
+                    # if a movie is recommended more than onece 
                     if all_reco_dict[r_dbp_uri] < r_confidence:
                         #all_reco_dict[r_dbp_uri] = m_entry
                         #dbp_id is included as an explanation
@@ -96,7 +113,8 @@ class MovieRecommender:
         all_reco_list = all_reco_dict.values()
 
 
-        return sorted(all_reco_list, key=lambda tup: tup[1],reverse=True)
+        all_reco_list =  sorted(all_reco_list, key=lambda tup: tup[1],reverse=True)
+        return (rated_movies,all_reco_list)
 
 
 def main():
@@ -108,7 +126,7 @@ def main():
     #r_list = recsys.get_movie_recommendations('http://dbpedia.org/resource/Wag_the_Dog')
 
     user_id = '100'
-    r_list = recsys.recommendation_for_user(user_id)
+    (rated_movies,r_list) = recsys.recommendation_for_user(user_id)
     #print r_list
     print "Recommedations for the user:", user_id
     for (movie_uri,confidence,dbp_id) in r_list:
