@@ -130,7 +130,7 @@ class MovieRecommender:
     
     """
     Explains a recommendation by querying DBpedia.
-    Returns a tuple with (common topic URI list, liked movie rating)
+    Returns a tuple with (common topic URI list, liked movie rating from which the recommendation is generated)
     """
     def explain_recommendation(self,user_id,recommended_movie_dbp_id,liked_movie_dbp_id):
         
