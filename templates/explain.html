@@ -5,7 +5,8 @@ common_topic_uri_list=common_topic_uri_list,recommended_movie_id=reco_movie_id,l
     {{recommended_movie_id}} is recommended because <br/>
     You rated {{liked_movie_id}} with rating {{liked_movie_rating}} <br/>
     and <br/>
-    {{liked_movie_id}} is a similar movie to {{recommended_movie_id}} .<br/>
+    {{recommended_movie_id}} is a similar <br/>
+    movie to {{liked_movie_id}} .<br/>
     They are similar movies due to the following common topics:
     <ul>
         {% for topic in common_topic_uri_list %}
