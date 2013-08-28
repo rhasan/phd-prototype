@@ -128,6 +128,10 @@ class MovieRecommender:
 
         return (rated_movies,all_reco_list)
     
+    """
+    Explains a recommendation by querying DBpedia.
+    Returns a tuple with (common topic URI list, liked movie rating)
+    """
     def explain_recommendation(self,user_id,recommended_movie_dbp_id,liked_movie_dbp_id):
         
         liked_movie_rating = 0;
