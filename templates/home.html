@@ -1,5 +1,20 @@
 {% extends "base.html" %}
-
+{% block login_area %}
+    {% for item in login_area_links %}
+        <a class="login-link" href="{{ item.href }}">{{ item.caption }}</a>     
+    {% endfor %}
+{% endblock %}
 {% block content %}
-	<h2>Welcome, I just wanted to say <em>hello</em> to {{username}}!</h2>
+	<h2>Welcome {{username}}!</h2>
+    <h3>Recommendations</h3>
+    <table>
+        {% for (dbp_id,confidence,expl_id) in recommendations %}
+            <tr>
+                <td>{{dbp_id | safe}}</td> 
+                <td><a class="normal-link"  href="javascript:popupwindow('/explain?r={{dbp_id|urlquote|urlquote}}&m={{expl_id|urlquote|urlquote}}','Explanation',800,600)">explanation</a></td>
+
+            </tr>
+        {% endfor %}
+    </table>
+
 {% endblock %}

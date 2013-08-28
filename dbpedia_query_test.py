@@ -20,6 +20,6 @@ sparql.setReturnFormat(JSON)
 results = sparql.query().convert()
 
 for result in results["results"]["bindings"]:
-    print util.url_decode(result["m"]["value"]), result["num"]["value"]
+    print util.url_unquote(result["m"]["value"]), result["num"]["value"]
     #print result["m"]["value"], result["num"]["value"]
     

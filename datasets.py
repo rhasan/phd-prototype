@@ -42,9 +42,9 @@ class MovieLens:
                     # for col in row:
                     #   print '%s: %s' % (header[colnum], col)
                     #   colnum += 1
-                    #print "row:",row[0], util.url_decode(row[1])
+                    #print "row:",row[0], util.url_unquote(row[1])
                     ml_id = row[0]
-                    #dbp_uri = util.url_decode(row[1])
+                    #dbp_uri = util.url_unquote(row[1])
                     dbp_uri = row[1]
                     self.ml_to_dbp[ml_id] = dbp_uri
                     self.dbp_to_ml[dbp_uri] = ml_id

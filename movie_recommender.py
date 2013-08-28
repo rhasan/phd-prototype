@@ -5,6 +5,7 @@ import util
 from datasets import MovieLens
 from SPARQLWrapper import SPARQLWrapper, JSON
 from collections import defaultdict
+from patterns import Singleton
 
 
 DBPEDIA_ENDPOINT = "http://dbpedia-test.inria.fr/sparql"
@@ -12,10 +13,13 @@ DBPEDIA_ENDPOINT = "http://dbpedia-test.inria.fr/sparql"
 INIT_USER_K = 10
 INIT_ITEM_K = 20
 
+@Singleton
 class MovieRecommender:
     def __init__(self):
         
         self.ml = MovieLens.Instance()
+        self.rated_movies = list()
+        self.reco_list = list()
         #self.ml.load_data()
     """
     Returns a list of similar movies based on the number of common dcterms:subject counts.
@@ -82,7 +86,12 @@ class MovieRecommender:
     def recommendation_for_user(self,ml_user_id):
 
 
+        #print len(self.rated_movies), len(self.reco_list)
+        if len(self.rated_movies)>0 and len(self.reco_list)>0:
+            return (self.rated_movies, self.reco_list)
+
         print "user:", ml_user_id, " likes"
+
         rated_movies = self.ml.get_user_rating_data(ml_user_id)
         avg_rating = self.ml.get_avg_user_rating(ml_user_id)
         
@@ -92,9 +101,9 @@ class MovieRecommender:
 
             rating_f = float(rating)
             #movies that the user likes
-            if rating_f >= avg_rating:
-                #print "finding recommendations for", util.url_decode(dbp_id)
-                print(util.url_decode(dbp_id))
+            if rating_f >= avg_rating and rating_f>0:
+                #print "finding recommendations for", util.url_unquote(dbp_id)
+                print dbp_id
                 m_reco_list = self.get_movie_recommendations(dbp_id)
                 #all_reco_list.extend(m_reco_list)
                 for m_entry in m_reco_list:
@@ -114,8 +123,42 @@ class MovieRecommender:
 
 
         all_reco_list =  sorted(all_reco_list, key=lambda tup: tup[1],reverse=True)
-        return (rated_movies,all_reco_list)
+        self.rated_movies=rated_movies
+        self.reco_list=all_reco_list
 
+        return (rated_movies,all_reco_list)
+    
+    def explain_recommendation(self,user_id,recommended_movie_dbp_id,liked_movie_dbp_id):
+        
+        liked_movie_rating = 0;
+        rated_movies = self.ml.get_user_rating_data(user_id)
+        for (dbp_id,rating,ml_id) in rated_movies:
+            if liked_movie_dbp_id == dbp_id:
+                liked_movie_rating = rating
+                break;
+
+        explanationQueryStr = """
+        SELECT ?o
+        WHERE
+        {
+            <"""+recommended_movie_dbp_id+"""> dcterms:subject ?o.
+            <"""+liked_movie_dbp_id+"""> dcterms:subject ?o.
+
+        }
+        """
+        sparql = SPARQLWrapper(DBPEDIA_ENDPOINT)
+        sparql.setQuery(explanationQueryStr)
+        sparql.setReturnFormat(JSON)
+        results = sparql.query().convert()
+        common_topic_uri_list = list()
+        for result in results["results"]["bindings"]:
+            common_topic_uri = result["o"]["value"]
+            common_topic_uri_list.append(common_topic_uri)
+        return (common_topic_uri_list,liked_movie_rating)
+
+    def reinit(self):
+        self.rated_movies = []
+        self.reco_list = []
 
 def main():
 
@@ -133,7 +176,7 @@ def main():
         try:
             #print movie_uri, confidence, "|explanation:",dbp_id
         
-            print util.url_decode(movie_uri), confidence, "|explanation:",util.url_decode(dbp_id)
+            print util.url_unquote(movie_uri), confidence, "|explanation:",util.url_unquote(dbp_id)
         except Exception, e:
             print "----------ERROR--------"
             print movie_uri, dbp_id

@@ -23,8 +23,11 @@ def unescape_html(s):
 """
 decodes a URI
 """
-def url_decode(s):
-    return urllib.unquote(s.encode('ascii'))
+def url_unquote(s):
+    return urllib.unquote(s)
+
+def url_quote(s):
+    return urllib.quote(s.encode('utf-8'))
 
 """
 checks valid username
@@ -99,7 +102,7 @@ def valid_pw(name, pw, h):
 
 
 def main():
-    print url_decode(u'http://dbpedia.org/resource/Moli%C3%A8re_%281978_film%29')
+    print url_unquote(u'http://dbpedia.org/resource/Moli%C3%A8re_%281978_film%29')
 
 if __name__ == "__main__":
     main()

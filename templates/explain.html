@@ -1,0 +1,16 @@
+{% extends "base_notitle.html" %}
+common_topic_uri_list=common_topic_uri_list,recommended_movie_id=reco_movie_id,liked_movie_id=liked_movie_id,liked_movie_rating=liked_movie_rating
+{% block content %}
+    <h3>Explanation</h3>
+    {{recommended_movie_id}} is recommended because <br/>
+    You rated {{liked_movie_id}} with rating {{liked_movie_rating}} <br/>
+    and <br/>
+    {{liked_movie_id}} is a similar movie to {{recommended_movie_id}} .<br/>
+    They are similar movies due to the following common topics:
+    <ul>
+        {% for topic in common_topic_uri_list %}
+            <li>{{topic | safe}}</li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}

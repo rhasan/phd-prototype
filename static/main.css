@@ -22,6 +22,11 @@ body {
     text-decoration: none;
 }
 
+.normal-link {
+    color: gray;
+    text-decoration: none;
+}
+
 .login-link:visited {
     color: gray;
 }

@@ -1,9 +1,15 @@
 {% extends "base.html" %}
-
+{% block login_area %}
+    {% for item in login_area_links %}
+        <a class="login-link" href="{{ item.href }}">{{ item.caption }}</a>     
+    {% endfor %}
+{% endblock %}
 {% block content %}
 	<h2>Welcome, {{username}}!</h2>
-    <p>You rated the following movies</p>
-  {% for (dbp_id,rating,ml_id) in rated_movies %}
-    {{dbp_id | safe}} &nbsp {{rating}}<br/>
-  {% endfor %}    
+    <h3>You have rated the following movies</h3>
+    <ul>
+        {% for (dbp_id,rating,ml_id) in rated_movies %}
+            <li>{{dbp_id | safe}}: {{rating | safe}}</li>
+        {% endfor %}    
+    </ul>  
 {% endblock %}
